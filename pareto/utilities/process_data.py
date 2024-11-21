@@ -189,11 +189,13 @@ def check_required_data(df_sets, df_parameters, config, model_type="strategic"):
             DesalinationModel.false: [],
             DesalinationModel.mvc: [],
             DesalinationModel.md: [],
+            DesalinationModel.nf: [],
         },
         config_required_params={
             DesalinationModel.false: [],
             DesalinationModel.mvc: ["DesalinationSurrogate"],
             DesalinationModel.md: ["DesalinationSurrogate"],
+            DesalinationModel.nf: ["DesalinationSurrogate"],
         },
     )
     data_error_items.extend(desalination_config_errors)

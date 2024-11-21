@@ -80,7 +80,8 @@ def plot_compare_nodes(values, stat_type, axis):
 
     axis.bar(labels, counts, color=colors)
     xticks = np.arange(len(labels))
-    axis.set_xticks(xticks, labels, rotation="vertical")
+    axis.set_xticks(xticks)
+    axis.set_xticklabels(labels, rotation="vertical")
     axis.set_title(stat_type)
     axis.set_ylabel("Dollars")
 

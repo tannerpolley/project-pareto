@@ -33,6 +33,7 @@ from pareto.utilities.results import (
     nostdout,
 )
 from importlib import resources
+from pyomo.environ import value
 
 
 # user needs to provide the path to the case study data file
@@ -45,13 +46,17 @@ strategic_small_case_study.xlsx
 strategic_toy_case_study.xlsx
 workshop_baseline_all_data.xlsx
 strategic_treatment_demo_surrogates.xlsx
+strategic_treatment_demo_surrogates_Li.xlsx
 """
 with resources.path(
     "pareto.case_studies",
-    "strategic_toy_case_study.xlsx",
+    "strategic_treatment_demo_surrogates.xlsx",
 ) as fpath:
     # When set_list and parameter_list are not specified to get_data(), all tabs with valid PARETO input names are read
     [df_sets, df_parameters] = get_data(fpath, model_type="strategic")
+
+print(df_sets)
+print(df_parameters)
 
 # create mathematical model
 """Valid values of config arguments for the default parameter in the create_model() call
@@ -75,7 +80,7 @@ strategic_model = create_model(
         "pipeline_cost": PipelineCost.distance_based,
         "pipeline_capacity": PipelineCapacity.input,
         "hydraulics": Hydraulics.false,
-        "desalination_model": DesalinationModel.false,
+        "desalination_model": DesalinationModel.mvc,
         "node_capacity": True,
         "water_quality": WaterQuality.false,
         "removal_efficiency_method": RemovalEfficiencyMethod.concentration_based,
@@ -115,3 +120,4 @@ print("\nConverting to Output Units and Displaying Solution\n" + "-" * 60)
     output_units=OutputUnits.user_units,
     fname="strategic_optimization_results.xlsx",
 )
+print(value(model.percent_Li_efficiency))

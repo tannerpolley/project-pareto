@@ -442,7 +442,7 @@ def solve(blk, solver=None, tee=True):
     return results
 
 
-def initialize_system(m, solver=None, verbose=True):
+def initialize_system(m, solver=None):
     if solver is None:
         solver = get_solver()
 
