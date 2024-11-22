@@ -20,6 +20,12 @@
 Nanofiltration flowsheet for Donnan steric pore model with dielectric exclusion
 """
 
+import idaes.core.util.scaling as iscale
+import idaes.logger as idaeslog
+from idaes.core import FlowsheetBlock, UnitModelCostingBlock
+from idaes.core.util.initialization import propagate_state
+from idaes.core.util.model_statistics import degrees_of_freedom
+from idaes.models.unit_models import Feed, Product
 # import statements
 from pyomo.environ import (
     value,
@@ -31,17 +37,9 @@ from pyomo.environ import (
     log10,
 )
 from pyomo.network import Arc
-
-import idaes.core.util.scaling as iscale
-from idaes.core import FlowsheetBlock, UnitModelCostingBlock
-from idaes.core.util.initialization import propagate_state
-from idaes.core.util.model_statistics import degrees_of_freedom
-from idaes.models.unit_models import Feed, Product
-
-from idaes.core.util import DiagnosticsToolbox
-import idaes.logger as idaeslog
-
 from watertap.core.solvers import get_solver
+from watertap.costing import WaterTAPCosting
+from watertap.costing.unit_models.pump import cost_pump
 from watertap.property_models.multicomp_aq_sol_prop_pack import (
     ActivityCoefficientModel,
     DensityCalculation,
@@ -49,8 +47,6 @@ from watertap.property_models.multicomp_aq_sol_prop_pack import (
 )
 from watertap.unit_models.nanofiltration_DSPMDE_0D import NanofiltrationDSPMDE0D
 from watertap.unit_models.pressure_changer import Pump
-from watertap.costing import WaterTAPCosting
-from watertap.costing.unit_models.pump import cost_pump
 
 _log = idaeslog.getLogger(__name__)
 
