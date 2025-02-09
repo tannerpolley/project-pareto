@@ -10,7 +10,7 @@
 # the Software to reproduce, distribute copies to the public, prepare derivative works, and perform
 # publicly and display publicly, and to permit others to do so.
 #####################################################################################################
-
+#%%
 from pareto.strategic_water_management.strategic_produced_water_optimization import (
     WaterQuality,
     create_model,
@@ -50,13 +50,10 @@ strategic_treatment_demo_surrogates_Li.xlsx
 """
 with resources.path(
     "pareto.case_studies",
-    "strategic_treatment_demo_surrogates.xlsx",
+    "strategic_treatment_demo_surrogates_Li.xlsx",
 ) as fpath:
     # When set_list and parameter_list are not specified to get_data(), all tabs with valid PARETO input names are read
     [df_sets, df_parameters] = get_data(fpath, model_type="strategic")
-
-print(df_sets)
-print(df_parameters)
 
 # create mathematical model
 """Valid values of config arguments for the default parameter in the create_model() call
@@ -76,15 +73,15 @@ strategic_model = create_model(
     df_sets,
     df_parameters,
     default={
-        "objective": Objectives.cost,
+        "objective": Objectives.cost_surrogate,
         "pipeline_cost": PipelineCost.distance_based,
         "pipeline_capacity": PipelineCapacity.input,
         "hydraulics": Hydraulics.false,
-        "desalination_model": DesalinationModel.mvc,
+        "desalination_model": DesalinationModel.nf,
         "node_capacity": True,
-        "water_quality": WaterQuality.false,
+        "water_quality": WaterQuality.post_process,
         "removal_efficiency_method": RemovalEfficiencyMethod.concentration_based,
-        "infrastructure_timing": InfrastructureTiming.true,
+        "infrastructure_timing": InfrastructureTiming.false,
         "subsurface_risk": SubsurfaceRisk.false,
     },
 )
@@ -93,7 +90,7 @@ options = {
     "deactivate_slacks": True,
     "scale_model": False,
     "scaling_factor": 1000,
-    "running_time": 200,
+    "running_time": 1000,
     "gap": 0,
 }
 
@@ -113,11 +110,13 @@ print("\nConverting to Output Units and Displaying Solution\n" + "-" * 60)
  is_print: [PrintValues.detailed, PrintValues.nominal, PrintValues.essential]
  output_units: [OutputUnits.user_units, OutputUnits.unscaled_model_units]
  """
+
+#%%
 [model, results_dict] = generate_report(
     strategic_model,
     results_obj=results,
-    is_print=PrintValues.essential,
+    is_print=PrintValues.detailed,
     output_units=OutputUnits.user_units,
     fname="strategic_optimization_results.xlsx",
 )
-print(value(model.percent_Li_efficiency))
+print(f'Percent Li Extracted: {model.percent_Li_efficiency["R01"].value:.2f}%')

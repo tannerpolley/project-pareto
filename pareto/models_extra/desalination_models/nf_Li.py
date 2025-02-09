@@ -175,7 +175,7 @@ def set_operating_conditions(m, feed_flow_mass=1, Li_conc = .00119, solver=None)
         m: pyomo model
     """
 
-    conc_mass_phase_comp = {"Li_+": Li_conc*1000, "Cl_-": Li_conc*1000/.1957}
+    conc_mass_phase_comp = {"Li_+": Li_conc*1000, "Cl_-": Li_conc*1000/.1957} # kg/L --> kg/m3
 
     if solver is None:
         solver = get_solver()

@@ -2816,7 +2816,7 @@ def create_model(df_sets, df_parameters, default={}):
             initialize=model.df_parameters["DesalinationSurrogate"]["recovery"],
             within=Reals,
             bounds=(0, 1),
-            doc="Volumetric recovery fraction of water",
+            doc="Capital operating treatment capacity [currency]",
         )
 
         # --- Addition for Nano filtration Process ---------------
@@ -2952,15 +2952,18 @@ def create_model(df_sets, df_parameters, default={}):
         model.treatment_vol = Constraint(model.s_R, model.s_T, rule=scalingTreatment)
         base_dir = Path(this_file_dir())
         if model.config.desalination_model == DesalinationModel.mvc:
+            print('mvc')
             keras_surrogate = KerasSurrogate.load_from_folder(
                 str(base_dir / "mvc_keras")
             )
         elif model.config.desalination_model == DesalinationModel.md:
+            print('md')
             keras_surrogate = KerasSurrogate.load_from_folder(
                 str(base_dir / "md_keras")
             )
 
         elif model.config.desalination_model == DesalinationModel.nf:
+            print('nf')
             keras_surrogate = KerasSurrogate.load_from_folder(
                 str(base_dir / "nf_keras")
             )
@@ -2973,7 +2976,7 @@ def create_model(df_sets, df_parameters, default={}):
             for t in model.s_T:
                 if model.p_chi_DesalinationSites[i]:
                     # Build the model with non-zero outputs
-                    if DesalinationModel.mvc or DesalinationModel.md:
+                    if model.config.desalination_model == DesalinationModel.mvc or model.config.desalination_model == DesalinationModel.md:
                         cap = model.v_T_Treatment_scaled[i, t]
                         model.surrogate_costs[i, t].build_model(
                             keras_surrogate,
@@ -2984,7 +2987,7 @@ def create_model(df_sets, df_parameters, default={}):
                                 model.v_C_Treatment_site[i, t],
                             ],
                         )
-                    elif DesalinationModel.nf:
+                    elif model.config.desalination_model == DesalinationModel.nf:
                         cap = model.v_T_Treatment_scaled[i, t]
                         model.surrogate_costs[i, t].build_model(
                             keras_surrogate,

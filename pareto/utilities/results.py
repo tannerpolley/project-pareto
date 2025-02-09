@@ -121,6 +121,7 @@ def generate_report(
                     "recovery",
                     "treatment_energy",
                     "inlet_salinity",
+                    "percent_Li_efficiency"
                     "vb_y_flow_ReLU",
                     "v_C_Treatment_site_ReLU",
                     "vb_y_BeneficialReuse",
@@ -158,6 +159,7 @@ def generate_report(
                     "v_C_TreatmentCapEx_site",
                     "recovery",
                     "inlet_salinity",
+                    "percent_Li_efficiency"
                     "vb_y_BeneficialReuse",
                     "v_F_Overview",
                 ]
@@ -1212,15 +1214,16 @@ def generate_report(
                         and var_value != 0
                         and variable.name
                         not in [
-                            "inlet_salinity",
+                            # "inlet_salinity",
                             "v_C_TreatmentCapEx_site",
                             "v_C_Treatment_site",
                             "v_C_Treatment_site_ReLU",
-                            "recovery",
+                            # "recovery",
                             "v_C_TreatmentCapEx_site_time",
                             "totalCapex",
                             "v_T_Treatment_scaled",
                             "v_T_Treatment_scaled_ReLU",
+                            # "percent_Li_efficiency",
                         ]
                     ):
                         headers[str(variable.name) + "_dict"].append((*i, var_value))
